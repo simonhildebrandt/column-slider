@@ -1,0 +1,55 @@
+body {
+  background-color: gray;
+}
+#page {
+  /*width: 500px;*/
+  height: 500px;
+  margin: auto;
+  background-color: white;
+}
+#slider {
+  border: 1px solid purple;
+  position: relative;
+}
+#slider-mask{
+  overflow: hidden;
+  position: relative;
+  height: 260px;
+}
+#slider-content {
+  height: 260px;
+  position: absolute;
+}
+.column {
+  float: left;
+  background-color: green;
+  height: 260px;
+}
+.column img {
+  display: block; 
+  margin: 0 2px 2px 0;
+}
+.column-width-1 {
+  width: 130px;
+  background-color: red;
+}
+.column-width-2 {
+  width: 258px;
+}
+
+.arrow {
+  z-index: 10;
+  position: absolute;
+  top: 20px;
+  display: block;
+  background-color: gray;
+  color: white;
+  text-decoration: none;
+  font-size: 50px;
+}
+.arrow-left {
+  left: -10px;
+}
+.arrow-right {
+  right: -10px;
+}
