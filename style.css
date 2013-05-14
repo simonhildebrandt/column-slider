@@ -21,7 +21,7 @@ body {
   position: absolute;
 }
 .column {
-  float: left;
+  display: inline-block;
   background-color: green;
   height: 260px;
 }

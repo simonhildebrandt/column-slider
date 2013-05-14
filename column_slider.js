@@ -80,7 +80,6 @@ $.widget( "bnm.column_slider", {
 
     slideTo: function(left) {
       var duration = Math.abs(left - this.offset()) / this.options.speed;
-      console.log(left);
       // Clamp sliding to displayable width
       left = Math.min(0, left);
       left = Math.max(this.offsetToMatchColumnRightEdge(this.columns.length - 1), left);
@@ -94,7 +93,7 @@ $.widget( "bnm.column_slider", {
     touchEvent: function(evt) {
       evt.preventDefault();
       var touch = evt.originalEvent.touches[0];
-      console.log('event ' + evt.type);
+      //console.log('event ' + evt.type);
       if (evt.type == 'touchstart') {
         this.touchdown = {clientX: touch.clientX, clientY: touch.clientY};
       }
@@ -126,17 +125,22 @@ $.widget( "bnm.column_slider", {
       }
     },
 
+    children: function() {
+      return this.element.children(this.options.column_class);
+    },
+
     _create: function() {
       this.initialize();
     },
 
     initialize: function() {
+      if (this.children().size() == 0) { return; }
       var tw = 0;
-      this.columns = this.element.children(this.options.column_class).each(function(i, o){
+      this.children().each(function(i, o){
         tw += $(o).width();
       });
       this.element.width(tw);
-      this.columns = this.element.children(this.options.column_class).map(function(i, o){
+      this.columns = this.children().map(function(i, o){
         return {
           object: o,
           width: $(o).width(),
@@ -149,7 +153,5 @@ $.widget( "bnm.column_slider", {
       this.element.on('touchend', $.proxy(this.touchEvent, this));
       this.element.on('touchcancel', $.proxy(this.touchEvent, this));
       this.element.on('touchleave', $.proxy(this.touchEvent, this));
-
-      this.stepLeft();
     }
   });
