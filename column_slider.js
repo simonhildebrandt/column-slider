@@ -51,7 +51,6 @@ $.widget( "bnm.column_slider", {
     },
 
     stepRight: function(distance){
-      console.log('stepping right');
       var column_index = 0;
       if (distance == 'column') {
         var destination = this.rightBorder();
@@ -66,7 +65,6 @@ $.widget( "bnm.column_slider", {
     },
 
     stepLeft: function(distance){
-      console.log('stepping left');
       var column_index = this.columns.length - 1;
       if (distance == 'column') {
         var destination = this.leftBorder();
@@ -110,10 +108,8 @@ $.widget( "bnm.column_slider", {
       }
       if (evt.type == 'touchend') {
         if (this.travel.clientX < 0) {
-          console.log('resolving right');
           this.stepRight('column');
         } else {
-          console.log('resolving left');
           this.stepLeft('column');
         }
       }
