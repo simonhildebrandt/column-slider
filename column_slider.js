@@ -69,7 +69,7 @@ $.widget( "bnm.column_slider", {
       if (distance == 'column') {
         var destination = this.leftBorder();
       } else {
-        var destination = this.columnLeftEdge(column_index) > this.leftBorder() - this.maskWidth() + this.options.minColumnWidth;
+        var destination = this.leftBorder() - this.maskWidth() + this.options.minColumnWidth;
       }
       while (column_index > 0 && this.columnLeftEdge(column_index) > destination) { 
         column_index--;
