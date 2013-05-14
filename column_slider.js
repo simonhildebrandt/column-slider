@@ -5,11 +5,14 @@ $.widget( "bnm.column_slider", {
       column_class: '.column',
       minColumnWidth: 128,
       speed: 2,
+      logdiv: null,
     },
  
     total_width: 0,
     content: null,
     columns: [],
+    touchdown: null,
+    travel: [0, 0],
 
     maskWidth: function(){
       return this.element.parent().width();
@@ -47,18 +50,28 @@ $.widget( "bnm.column_slider", {
       return -1 * leftEdge;
     },
 
-    stepRight: function(){
+    stepRight: function(distance){
       var column_index = 0;
-       while (column_index < this.columns.length - 1 && this.columnRightEdge(column_index) < this.rightBorder() + this.maskWidth() - this.options.minColumnWidth) {
+      if (distance == 'column') {
+        var destination = this.rightBorder();
+      } else {
+        var destination = this.rightBorder() + this.maskWidth() - this.options.minColumnWidth;
+      }
+      while (column_index < this.columns.length - 1 && this.columnRightEdge(column_index) < destination) {
         column_index++;
       }
       var left = this.offsetToMatchColumnRightEdge(column_index);
       this.slideTo(left);
     },
 
-    stepLeft: function(){
+    stepLeft: function(distance){
       var column_index = this.columns.length - 1;
-      while (column_index > 0 && this.columnLeftEdge(column_index) > this.leftBorder() - this.maskWidth() + this.options.minColumnWidth) { 
+      if (distance == 'column') {
+        var destination = this.leftBorder();
+      } else {
+        var destination = this.columnLeftEdge(column_index) > this.leftBorder() - this.maskWidth() + this.options.minColumnWidth;
+      }
+      while (column_index > 0 && this.columnLeftEdge(column_index) > destination) { 
         column_index--;
       }
       var left = this.offsetToMatchColumnLeftEdge(column_index);
@@ -67,7 +80,50 @@ $.widget( "bnm.column_slider", {
 
     slideTo: function(left) {
       var duration = Math.abs(left - this.offset()) / this.options.speed;
+      console.log(left);
+      // Clamp sliding to displayable width
+      left = Math.min(0, left);
+      left = Math.max(this.offsetToMatchColumnRightEdge(this.columns.length - 1), left);
       this.element.animate({left: left}, duration);
+    },
+
+    moveTo: function(left) {
+      this.element.css({left: left});
+    },
+
+    touchEvent: function(evt) {
+      evt.preventDefault();
+      var touch = evt.originalEvent.touches[0];
+      console.log('event ' + evt.type);
+      if (evt.type == 'touchstart') {
+        this.touchdown = {clientX: touch.clientX, clientY: touch.clientY};
+      }
+      if (evt.type == 'touchmove') {
+        this.travel = {clientX: touch.clientX - this.touchdown.clientX, clientY: touch.clientY - this.touchdown.clientY};
+        this.moveTo(this.offset() + this.travel.clientX);
+        this.touchdown = {clientX: touch.clientX, clientY: touch.clientY};
+      }
+      if (evt.type == 'touchend') {
+        if (this.travel.clientX < 0) {
+          this.stepRight('column');
+        } else {
+          this.stepLeft('column');
+        }
+      }
+      if (evt.type == 'touchcancel') {
+
+      }
+      if (evt.type == 'touchleave' ) {
+
+      }
+
+      this.log(evt.timeStamp+ ' - ' +evt.type+ ' - ' + this.element);
+    },
+
+    log: function(string) {
+      if (this.options.logdiv) {
+        $(this.options.logdiv).prepend($('<div>'+string+'</div>'));
+      }
     },
 
     _create: function() {
@@ -87,6 +143,13 @@ $.widget( "bnm.column_slider", {
           left: $(o).position().left
         };
       });
+
+      this.element.on('touchstart', $.proxy(this.touchEvent, this));
+      this.element.on('touchmove', $.proxy(this.touchEvent, this));
+      this.element.on('touchend', $.proxy(this.touchEvent, this));
+      this.element.on('touchcancel', $.proxy(this.touchEvent, this));
+      this.element.on('touchleave', $.proxy(this.touchEvent, this));
+
       this.stepLeft();
     }
   });

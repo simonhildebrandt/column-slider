@@ -16,7 +16,7 @@
           }
           $('#slider-content').append(x);
         });
-        $('#slider-content').column_slider();
+        $('#slider-content').column_slider({logdiv: '#log'});
 
         $(document).on('click', '#arrow-right', function(){
           $('#slider-content').column_slider('stepRight');
@@ -36,7 +36,9 @@
         </div>
         <a href="#" id="arrow-left" class="arrow arrow-left">&larr;</a>
         <a href="#" id="arrow-right" class="arrow arrow-right">&rarr;</a>
-    </div>
+      </div>
+      <div id="log">
+      </div>
     </div>
   </body>
 </html>
