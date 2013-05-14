@@ -7,35 +7,46 @@
     <script src="column_slider.js" type="text/javascript"></script>
     <script>
       $(document).ready(function(){
-        var columns = [1,2,1,2,2];
+        var columns = [1,2,1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
         $(columns).each(function(i, o){
           if (o == 1) {
             var x = '<div class="column column-width-2"><img src="http://placehold.it/256x258&amp;text=column '+i+'"/></div>'
           } else {
             var x = '<div class="column column-width-1"><img src="http://placehold.it/128x128&amp;text=column '+i+'"/><img src="http://placehold.it/128x128&amp;text=column '+i+'"/></div>'
           }
-          $('#slider-content').append(x);
+          $('.slider-content').first().append(x);
         });
-        $('#slider-content').column_slider({logdiv: '#log'});
+        $('.slider-content').each(function(i, o) {
+          arrowCallback = function(arrowFlags) {
+            console.log(arrowFlags);
+            $(o).parent().siblings('.arrow-left').css({display: arrowFlags.left ? 'block' : 'none'});
+            $(o).parent().siblings('.arrow-right').css({display: arrowFlags.right ? 'block' : 'none'});
+          }
+          $(o).column_slider({logdiv: '#log', buttonCallback: arrowCallback});
 
-        $(document).on('click', '#arrow-right', function(){
-          $('#slider-content').column_slider('stepRight');
+          $(o).parent().siblings('.arrow-left').on('click', {slider: o}, function(e){
+            console.log('left arrow');
+            $(e.data.slider).column_slider('stepLeft');
+          });
+          $(o).parent().siblings('.arrow-right').on('click', {slider: o}, function(e){
+            console.log('right arrow');
+            $(e.data.slider).column_slider('stepRight');
+          });
         });
-        $(document).on('click', '#arrow-left', function(){
-          $('#slider-content').column_slider('stepLeft');
-        });
+        
       });
+
     </script>
     <head>
   <body>
     <div id="page">
       <div id="slider">
         <div id="slider-mask">
-          <div id="slider-content">
+          <div class="slider-content">
           </div>
         </div>
-        <a href="#" id="arrow-left" class="arrow arrow-left">&larr;</a>
-        <a href="#" id="arrow-right" class="arrow arrow-right">&rarr;</a>
+        <a href="#" class="arrow arrow-left">&larr;</a>
+        <a href="#" class="arrow arrow-right">&rarr;</a>
       </div>
       <div id="log">
       </div>

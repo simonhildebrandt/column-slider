@@ -16,7 +16,7 @@ body {
   position: relative;
   height: 260px;
 }
-#slider-content {
+.slider-content {
   height: 260px;
   position: absolute;
 }

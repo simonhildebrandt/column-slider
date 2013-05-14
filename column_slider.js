@@ -6,9 +6,9 @@ $.widget( "bnm.column_slider", {
       minColumnWidth: 128,
       speed: 2,
       logdiv: null,
+      buttonCallback: null,
     },
  
-    total_width: 0,
     content: null,
     columns: [],
     touchdown: null,
@@ -83,11 +83,20 @@ $.widget( "bnm.column_slider", {
       // Clamp sliding to displayable width
       left = Math.min(0, left);
       left = Math.max(this.leftLimit(), left);
-      this.element.animate({left: left}, duration);
+      this.element.animate({left: left}, {duration: duration, complete: $.proxy(this.notifyButtonCallback, this)});
     },
 
     moveTo: function(left) {
       this.element.css({left: left});
+      this.notifyButtonCallback();
+    },
+
+    notifyButtonCallback: function() {
+      if (!this.options.buttonCallback) return;
+      this.options.buttonCallback({
+        left: this.offset() < 0,
+        right: (this.element.width() + this.offset()) > this.maskWidth(),
+      });
     },
 
     leftLimit: function(){
@@ -141,13 +150,13 @@ $.widget( "bnm.column_slider", {
       if (this.children().size() == 0) { return; }
       var tw = 0;
       this.children().each(function(i, o){
-        tw += $(o).width();
+        tw += $(o).outerWidth(true);
       });
       this.element.width(tw);
       this.columns = this.children().map(function(i, o){
         return {
           object: o,
-          width: $(o).width(),
+          width: $(o).outerWidth(true),
           left: $(o).position().left
         };
       });
@@ -157,5 +166,7 @@ $.widget( "bnm.column_slider", {
       this.element.on('touchend', $.proxy(this.touchEvent, this));
       this.element.on('touchcancel', $.proxy(this.touchEvent, this));
       this.element.on('touchleave', $.proxy(this.touchEvent, this));
+
+      this.notifyButtonCallback();
     }
   });
