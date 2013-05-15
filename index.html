@@ -24,6 +24,10 @@
           }
           $(o).column_slider({logdiv: '#log', buttonCallback: arrowCallback});
 
+          $(window).on('resize', {slider: o}, function(e) {
+            $(e.data.slider).column_slider('setWidth');
+          });
+
           $(o).parent().siblings('.arrow-left').on('click', {slider: o}, function(e){
             console.log('left arrow');
             $(e.data.slider).column_slider('stepLeft');

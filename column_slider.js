@@ -50,6 +50,16 @@ $.widget( "bnm.column_slider", {
       return -1 * leftEdge;
     },
 
+    leftLimit: function(){
+      return Math.min(0, this.maskWidth() - this.element.width());
+    },
+
+    clampOffset: function(left){
+      left = Math.min(0, left);
+      left = Math.max(this.leftLimit(), left);
+      return left;
+    },
+
     stepRight: function(distance){
       var column_index = 0;
       if (distance == 'column') {
@@ -81,8 +91,7 @@ $.widget( "bnm.column_slider", {
     slideTo: function(left) {
       var duration = Math.abs(left - this.offset()) / this.options.speed;
       // Clamp sliding to displayable width
-      left = Math.min(0, left);
-      left = Math.max(this.leftLimit(), left);
+      left = this.clampOffset(left);
       this.element.animate({left: left}, {duration: duration, complete: $.proxy(this.notifyButtonCallback, this)});
     },
 
@@ -97,10 +106,6 @@ $.widget( "bnm.column_slider", {
         left: this.offset() < 0,
         right: (this.element.width() + this.offset()) > this.maskWidth(),
       });
-    },
-
-    leftLimit: function(){
-      return Math.min(0, this.maskWidth() - this.element.width());
     },
 
     touchEvent: function(evt) {
@@ -152,6 +157,11 @@ $.widget( "bnm.column_slider", {
         tw += $(o).outerWidth(true);
       });
       this.element.width(tw);
+
+      var left = this.clampOffset(this.offset());
+      this.moveTo(left);
+
+      this.notifyButtonCallback();
     },
 
     initialize: function() {
