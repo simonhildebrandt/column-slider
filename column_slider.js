@@ -146,13 +146,19 @@ $.widget( "bnm.column_slider", {
       this.initialize();
     },
 
-    initialize: function() {
-      if (this.children().size() == 0) { return; }
+    setWidth: function() {
       var tw = 0;
       this.children().each(function(i, o){
         tw += $(o).outerWidth(true);
       });
       this.element.width(tw);
+    },
+
+    initialize: function() {
+      if (this.children().size() == 0) { return; }
+
+      this.setWidth();
+
       this.columns = this.children().map(function(i, o){
         return {
           object: o,
