@@ -104,7 +104,7 @@ $.widget( "bnm.column_slider", {
     },
 
     touchEvent: function(evt) {
-      evt.preventDefault();
+      evt.preventDefault();
       var touch = evt.originalEvent.touches[0];
       //console.log('event ' + evt.type);
       if (evt.type == 'touchstart') {
