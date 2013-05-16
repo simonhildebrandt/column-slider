@@ -14,9 +14,9 @@
         var columns = [1,2,1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2];
         $(columns).each(function(i, o){
           if (o == 1) {
-            var x = '<div class="column column-width-2"><img src="http://placehold.it/256x258&amp;text=column '+i+'"/></div>'
+            var x = '<div class="column column-width-2"><a href="#">Link</a><img src="http://placehold.it/256x258&amp;text=column '+i+'"/></div>'
           } else {
-            var x = '<div class="column column-width-1"><img src="http://placehold.it/128x128&amp;text=column '+i+'"/><img src="http://placehold.it/128x128&amp;text=column '+i+'"/></div>'
+            var x = '<div class="column column-width-1"><a href="#">Link</a><img src="http://placehold.it/128x128&amp;text=column '+i+'"/><img src="http://placehold.it/128x128&amp;text=column '+i+'"/></div>'
           }
           $('.slider-content').first().append(x);
         });
@@ -78,7 +78,14 @@
           }      
         });
 
+        $('a').on('click', function(){
+          log('clicked');
+        });
       });
+
+      function log(string){
+        $('#log').prepend($('<div>'+string+'</div>'));
+      }
 
     </script>
     <head>

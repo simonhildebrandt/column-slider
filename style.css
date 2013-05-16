@@ -6,3 +6,8 @@ body {
   margin: auto;
   background-color: white;
 }
+.column a {
+  display: block;
+  position: absolute;
+  font-size: 50px;
+}

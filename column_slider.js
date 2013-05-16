@@ -107,6 +107,9 @@ $.widget( "bnm.column_slider", {
     },
 
     touchEvent: function(evt) {
+      if ($(evt.originalEvent.srcElement).is('a')) {
+        return;
+      }
       evt.preventDefault();
       var touch = evt.originalEvent.touches[0];
       //console.log('event ' + evt.type);
@@ -142,7 +145,7 @@ $.widget( "bnm.column_slider", {
 
     unregisterCallbacks: function() {
       console.log('removing callbacks');
-      $(window).off('resize.column_slider');
+      $(window).off('.column_slider');
       this.element.off('.column_slider');
     },
 
