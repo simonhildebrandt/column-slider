@@ -1,0 +1,13 @@
+.column {
+}
+.column img {
+  width: 128px;
+  height: 128px;
+  display: block;
+}
+.arrow-left {
+  display: none;
+}
+.arrow-right {
+  display: none;
+}

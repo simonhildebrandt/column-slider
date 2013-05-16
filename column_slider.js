@@ -6,7 +6,6 @@ $.widget( "bnm.column_slider", {
       minColumnWidth: 128,
       speed: 2,
       logdiv: null,
-      buttonCallback: null,
     },
  
     content: null,
@@ -101,8 +100,7 @@ $.widget( "bnm.column_slider", {
     },
 
     notifyButtonCallback: function() {
-      if (!this.options.buttonCallback) return;
-      this.options.buttonCallback({
+      this._trigger('buttonCallback', null, {
         left: this.offset() < 0,
         right: (this.element.width() + this.offset()) > this.maskWidth(),
       });
@@ -111,7 +109,7 @@ $.widget( "bnm.column_slider", {
     touchEvent: function(evt) {
       evt.preventDefault();
       var touch = evt.originalEvent.touches[0];
-      //console.log('event ' + evt.type);
+      console.log('event ' + evt.type);
       if (evt.type == 'touchstart') {
         this.touchdown = {clientX: touch.clientX, clientY: touch.clientY};
       }
@@ -135,6 +133,27 @@ $.widget( "bnm.column_slider", {
       }
 
       this.log(evt.timeStamp+ ' - ' +evt.type+ ' - ' + this.element);
+    },
+
+    resizeEvent: function(e){
+      console.log('resize listener');
+      this.setWidth();
+    },
+
+    unregisterCallbacks: function() {
+      console.log('removing callbacks');
+      $(window).off('resize.column_slider');
+      this.element.off('.column_slider');
+    },
+
+    registerCallbacks: function() {
+      console.log('registering callbacks');
+      $(window).on('resize.column_slider', $.proxy(this.resizeEvent, this));
+      this.element.on('touchstart.column_slider', $.proxy(this.touchEvent, this));
+      this.element.on('touchmove.column_slider', $.proxy(this.touchEvent, this));
+      this.element.on('touchend.column_slider', $.proxy(this.touchEvent, this));
+      this.element.on('touchcancel.column_slider', $.proxy(this.touchEvent, this));
+      this.element.on('touchleave.column_slider', $.proxy(this.touchEvent, this));
     },
 
     log: function(string) {
@@ -177,11 +196,7 @@ $.widget( "bnm.column_slider", {
         };
       });
 
-      this.element.on('touchstart', $.proxy(this.touchEvent, this));
-      this.element.on('touchmove', $.proxy(this.touchEvent, this));
-      this.element.on('touchend', $.proxy(this.touchEvent, this));
-      this.element.on('touchcancel', $.proxy(this.touchEvent, this));
-      this.element.on('touchleave', $.proxy(this.touchEvent, this));
+      this.registerCallbacks();
 
       this.notifyButtonCallback();
     }
