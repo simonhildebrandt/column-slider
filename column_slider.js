@@ -100,16 +100,16 @@ $.widget( "bnm.column_slider", {
     },
 
     notifyButtonCallback: function() {
-      this._trigger('buttonCallback', null, {
+      this._trigger('update_buttons', null, {
         left: this.offset() < 0,
-        right: (this.element.width() + this.offset()) > this.maskWidth(),
+        right: (this.element.width() + this.offset()) > this.maskWidth()
       });
     },
 
     touchEvent: function(evt) {
       evt.preventDefault();
       var touch = evt.originalEvent.touches[0];
-      console.log('event ' + evt.type);
+      //console.log('event ' + evt.type);
       if (evt.type == 'touchstart') {
         this.touchdown = {clientX: touch.clientX, clientY: touch.clientY};
       }

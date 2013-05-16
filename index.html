@@ -40,11 +40,11 @@
             console.log("setup min-width:500px");
 
             $('.slider-content').each(function(i, o) {
-              arrowCallback = function(arrowFlags) {
+              arrowCallback = function(e, arrowFlags) {
                 $(o).parent().siblings('.arrow-left').css({display: arrowFlags.left ? 'block' : 'none'});
                 $(o).parent().siblings('.arrow-right').css({display: arrowFlags.right ? 'block' : 'none'});
               }
-              $(o).column_slider({logdiv: '#log', buttonCallback: arrowCallback});
+              $(o).column_slider({logdiv: '#log', update_buttons: arrowCallback});
 
               $(o).parent().siblings('.arrow-left').on('click', {slider: o}, function(e){
                 console.log('left arrow');
